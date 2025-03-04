@@ -7,10 +7,6 @@ T = TypeVar("T")
 
 class AbstractRepository(ABC, Generic[T]):
     @abstractmethod
-    def get_by_username(self, username: str) -> Optional[T]:
-        pass
-
-    @abstractmethod
     def get_by_id(self, item_id: int) -> Optional[T]:
         pass
 

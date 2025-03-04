@@ -1,13 +1,12 @@
-from typing import Type, TypeVar, Generic, Optional, List
+from typing import Type, TypeVar, Generic, Optional, Sequence
 
+from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from app.repositories.abstract_repo import AbstractRepository
 from app.models import Base
+from app.repositories.abstract_repo import AbstractRepository
 from app.utils.logger import logger
-
 
 T = TypeVar("T", bound=Base)
 
@@ -17,14 +16,7 @@ class BaseRepository(AbstractRepository[T], Generic[T]):
         self.db = db
         self.model = model
 
-    async def get_by_username(self, username: str, *filters) -> Optional[T]:
-        base_filters = [self.model.username == username, self.model.deleted.is_(False)]
-        if filters:
-            base_filters.extend(filters)
-        stmt = select(self.model).where(*base_filters)
-        return await self.db.scalar(stmt)
-
-    async def get_all(self, *filters) -> List[T]:
+    async def get_all(self, *filters) -> Sequence[T]:
         base_filters = [self.model.deleted.is_(False)]
         if filters:
             base_filters.extend(filters)
@@ -40,10 +32,10 @@ class BaseRepository(AbstractRepository[T], Generic[T]):
         return await self.db.scalar(stmt)
 
     async def create(self, item_data: dict) -> Optional[T]:
-        logger.warning("BASE_REPO: Attempt to create something")
+        logger.warning(f"BASE_REPO: Creating {self.model.__name__} with data {item_data}")
         item = self.model(**item_data)
         try:
-            self.db.add(item)
+            await self.db.merge(item)
             await self.db.commit()
             await self.db.refresh(item)
         except SQLAlchemyError as e:
@@ -53,7 +45,7 @@ class BaseRepository(AbstractRepository[T], Generic[T]):
         return item
 
     async def update(self, item_id: int, item_data: dict) -> Optional[T]:
-        logger.warning("BASE_REPO: Attempt to update something")
+        logger.warning(f"BASE_REPO: Updating {self.model.__name__} with data {item_data}")
         item = await self.get_by_id(item_id)
         if not item:
             return None
