@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 
 from sqlalchemy import select, Sequence
 from sqlalchemy.exc import SQLAlchemyError
@@ -32,7 +32,7 @@ class LogRepository:
             await self.db.rollback()
             return None
 
-    async def create(self, before: Dict, after: Dict) -> Optional[Log]:
+    async def create(self, before: dict, after: dict) -> Optional[Log]:
         try:
             item = Log(before=before, after=after)
             self.db.add(item)
