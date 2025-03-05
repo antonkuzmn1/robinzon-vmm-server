@@ -1,8 +1,9 @@
-from typing import Optional, List
+from typing import Optional
 
+from sqlalchemy import select, Sequence
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+
 from app.models import Config
 from app.utils.logger import logger
 
@@ -11,7 +12,7 @@ class ConfigRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_all(self) -> List[Config]:
+    async def get_all(self) -> Sequence[Config]:
         try:
             result = await self.db.execute(select(Config))
             configs = result.scalars().all()
