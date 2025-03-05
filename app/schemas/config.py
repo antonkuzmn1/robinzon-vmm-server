@@ -3,7 +3,7 @@ from pydantic import BaseModel, ConfigDict
 
 class ConfigBase(BaseModel):
     key: str
-    value: str
+    value: str = ''
 
 
 class ConfigCreate(ConfigBase):
@@ -15,4 +15,5 @@ class ConfigUpdate(ConfigBase):
 
 
 class ConfigOut(ConfigBase):
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        model_config = ConfigDict(from_attributes=True)
