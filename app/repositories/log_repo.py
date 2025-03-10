@@ -12,10 +12,10 @@ class LogRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_all(self) -> Sequence[Log]:
+    async def get_all(self) -> list[Log]:
         try:
             result = await self.db.execute(select(Log))
-            configs = result.scalars().all()
+            configs = list(result.scalars().all())
             return configs
         except SQLAlchemyError as e:
             logger.error(f"Failed to get all logs: {e}")

@@ -9,14 +9,6 @@ class VersionBase(BaseModel):
     text: str = ''
 
 
-class VersionCreate(VersionBase):
-    pass
-
-
-class VersionUpdate(VersionBase):
-    pass
-
-
 class VersionOut(VersionBase):
     id: int
     created_at: Optional[datetime] = None

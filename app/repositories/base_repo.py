@@ -16,7 +16,7 @@ class BaseRepository(AbstractRepository[T], Generic[T]):
         self.db = db
         self.model = model
 
-    async def get_all(self, *filters) -> Sequence[T]:
+    async def get_all(self, *filters) -> list[T]:
         base_filters = [self.model.deleted.is_(False)]
         if filters:
             base_filters.extend(filters)

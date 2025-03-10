@@ -13,14 +13,6 @@ class ServerBase(BaseModel):
     password: str = ''
 
 
-class ServerCreate(ServerBase):
-    pass
-
-
-class ServerUpdate(ServerBase):
-    pass
-
-
 class ServerOut(ServerBase):
     id: int
     created_at: Optional[datetime] = None

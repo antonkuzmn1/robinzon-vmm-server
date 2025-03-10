@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, cast
+from typing import Optional, cast
 
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,7 +15,7 @@ class VMRepository(BaseRepository[VM]):
     def __init__(self, db: AsyncSession):
         super().__init__(db, VM)
 
-    async def get_all_vms_by_group(self, group_id: int) -> Sequence[VM]:
+    async def get_all_vms_by_group(self, group_id: int) -> list[VM]:
         try:
             stmt = (
                 select(VM)
@@ -24,13 +24,13 @@ class VMRepository(BaseRepository[VM]):
                 .where(cast("ColumnElement[bool]", m2m_group_vm.c.group_id == group_id))
             )
             result = await self.db.scalars(stmt)
-            return result.all()
+            return list(result.all())
         except SQLAlchemyError as e:
             logger.error(f"Error fetching vms by group: {e}")
             await self.db.rollback()
             return []
 
-    async def get_all_groups_by_vm(self, vm_id: int) -> Sequence[Group]:
+    async def get_all_groups_by_vm(self, vm_id: int) -> list[Group]:
         try:
             stmt = (
                 select(VM)

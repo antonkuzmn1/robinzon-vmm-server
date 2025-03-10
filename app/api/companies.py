@@ -8,7 +8,7 @@ from app.schemas.company import CompanyOut, CompanyCreate, CompanyUpdate
 from app.schemas.owner import OwnerOut
 from app.schemas.user import UserOut
 from app.dependencies.services import get_company_service
-from app.services.company_service import CompanyService
+from app.services.group_service import CompanyService
 
 router = APIRouter(prefix="/companies", tags=["companies"])
 

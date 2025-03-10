@@ -9,14 +9,6 @@ class LogBase(BaseModel):
     after: dict
 
 
-class LogCreate(LogBase):
-    pass
-
-
-class LogUpdate(LogBase):
-    pass
-
-
 class LogOut(LogBase):
     id: int
     created_at: Optional[datetime] = None

@@ -15,7 +15,7 @@ class GroupRepository(BaseRepository[Group]):
     def __init__(self, db: AsyncSession):
         super().__init__(db, Group)
 
-    async def get_all_groups_by_account(self, account_id: int) -> Sequence[Group]:
+    async def get_all_groups_by_account(self, account_id: int) -> list[Group]:
         try:
             stmt = (
                 select(Account)
@@ -32,7 +32,7 @@ class GroupRepository(BaseRepository[Group]):
             await self.db.rollback()
             return []
 
-    async def get_all_groups_by_vm(self, vm_id: int) -> Sequence[Group]:
+    async def get_all_groups_by_vm(self, vm_id: int) -> list[Group]:
         try:
             stmt = (
                 select(VM)
@@ -49,7 +49,7 @@ class GroupRepository(BaseRepository[Group]):
             await self.db.rollback()
             return []
 
-    async def get_all_accounts_by_group(self, group_id: int) -> Sequence[Account]:
+    async def get_all_accounts_by_group(self, group_id: int) -> list[Account]:
         try:
             stmt = (
                 select(Account)
@@ -58,13 +58,13 @@ class GroupRepository(BaseRepository[Group]):
                 .where(cast("ColumnElement[bool]", m2m_group_account.c.group_id == group_id))
             )
             result = await self.db.scalars(stmt)
-            return result.all()
+            return list(result.all())
         except SQLAlchemyError as e:
             logger.error(f"Error fetching accounts by group: {e}")
             await self.db.rollback()
             return []
 
-    async def get_all_vms_by_group(self, group_id: int) -> Sequence[VM]:
+    async def get_all_vms_by_group(self, group_id: int) -> list[VM]:
         try:
             stmt = (
                 select(VM)
@@ -73,7 +73,7 @@ class GroupRepository(BaseRepository[Group]):
                 .where(cast("ColumnElement[bool]", m2m_group_vm.c.group_id == group_id))
             )
             result = await self.db.scalars(stmt)
-            return result.all()
+            return list(result.all())
         except SQLAlchemyError as e:
             logger.error(f"Error fetching vms by group: {e}")
             await self.db.rollback()

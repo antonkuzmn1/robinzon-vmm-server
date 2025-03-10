@@ -12,14 +12,13 @@ class ConfigRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_all(self) -> Sequence[Config]:
+    async def get_all(self) -> list[Config]:
         try:
             result = await self.db.execute(select(Config))
-            configs = result.scalars().all()
+            configs = list(result.scalars().all())
             return configs
         except SQLAlchemyError as e:
             logger.error(f"Failed to get all configs: {e}")
-            await self.db.rollback()
             return []
 
     async def get_by_key(self, key: str) -> Optional[Config]:

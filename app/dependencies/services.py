@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db import get_db
 from app.services.admin_service import AdminService
 from app.services.auth_service import AuthService
-from app.services.company_service import CompanyService
+from app.services.group_service import CompanyService
 from app.services.config_service import ConfigService
 from app.services.owner_service import OwnerService
 from app.services.user_service import UserService

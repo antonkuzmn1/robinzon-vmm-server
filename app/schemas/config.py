@@ -6,14 +6,6 @@ class ConfigBase(BaseModel):
     value: str = ''
 
 
-class ConfigCreate(ConfigBase):
-    pass
-
-
-class ConfigUpdate(ConfigBase):
-    pass
-
-
 class ConfigOut(ConfigBase):
     class Config:
         model_config = ConfigDict(from_attributes=True)

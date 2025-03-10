@@ -9,14 +9,6 @@ class GroupBase(BaseModel):
     description: str = ''
 
 
-class GroupCreate(GroupBase):
-    pass
-
-
-class GroupUpdate(GroupBase):
-    pass
-
-
 class GroupOut(GroupBase):
     id: int
     created_at: Optional[datetime] = None

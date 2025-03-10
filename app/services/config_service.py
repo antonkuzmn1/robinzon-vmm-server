@@ -1,9 +1,9 @@
-from typing import List, Optional
+from typing import Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repositories.config_repo import ConfigRepository
-from app.schemas.config import ConfigOut, ConfigCreate, ConfigUpdate
+from app.schemas.config import ConfigOut, ConfigBase
 
 
 class ConfigService:
@@ -12,7 +12,7 @@ class ConfigService:
         self.repository = repo
         self.schema_out = ConfigOut
 
-    async def get_all(self) -> List[ConfigOut]:
+    async def get_all(self) -> list[ConfigOut]:
         records = await self.repository.get_all()
         return [self.schema_out.model_validate(record) for record in records]
 
@@ -22,11 +22,11 @@ class ConfigService:
             return self.schema_out.model_validate(record)
         return None
 
-    async def create(self, config: ConfigCreate) -> ConfigOut:
+    async def create(self, config: ConfigBase) -> Optional[ConfigOut]:
         record = await self.repository.create(key=config.key, value=config.value)
         return self.schema_out.model_validate(record)
 
-    async def update(self, key: str, config: ConfigUpdate) -> Optional[ConfigOut]:
+    async def update(self, key: str, config: ConfigBase) -> Optional[ConfigOut]:
         record = await self.repository.update(key=key, value=config.value)
         if record:
             return self.schema_out.model_validate(record)

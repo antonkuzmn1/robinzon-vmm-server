@@ -17,14 +17,6 @@ class VMBase(BaseModel):
     password: str = ''
 
 
-class VMCreate(VMBase):
-    pass
-
-
-class VMUpdate(VMBase):
-    pass
-
-
 class VMOut(VMBase):
     id: int
     created_at: Optional[datetime] = None
